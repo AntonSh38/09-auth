@@ -1,12 +1,13 @@
 'use client';
 
 import Modal from '@/components/Modal/Modal';
-import { fetchNoteById } from '@/lib/api';
+
 import { Note } from '@/types/note';
 import { useQuery } from '@tanstack/react-query';
 import css from '../../../../components/NotePreview/NotePreview.module.css';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { fetchNoteById } from '@/lib/api/clientApi';
 
 interface Props {
   noteId: string;

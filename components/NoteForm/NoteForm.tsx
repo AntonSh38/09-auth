@@ -2,11 +2,12 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { createNote } from '@/lib/api';
+
 import css from './NoteForm.module.css';
 import { useRouter } from 'next/navigation';
 import { useNoteStore } from '@/lib/store/noteStore';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { createNote } from '@/lib/api/clientApi';
 
 export default function NoteForm() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function NoteForm() {
   const createNoteMutation = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ['notes'] });
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
       toast.success('Note created successfully!');
       clearDraft();
       router.push('/notes/filter/all');

@@ -5,6 +5,7 @@ import Footer from '@/components/Footer/Footer';
 import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
+import AuthProvider from '@/components/AuthProvider/AuthProvider';
 
 const roboto = Roboto({
   weight: ['400', '600', '700'],
@@ -54,11 +55,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.variable}`}>
         <TanStackProvider>
-          <Header />
-          {children}
-          {modal}
-          <Footer />
-          <Toaster position="top-center" />
+          <AuthProvider>
+            <Header />
+            {children}
+            {modal}
+            <Footer />
+            <Toaster position="top-center" />
+          </AuthProvider>
         </TanStackProvider>
       </body>
     </html>

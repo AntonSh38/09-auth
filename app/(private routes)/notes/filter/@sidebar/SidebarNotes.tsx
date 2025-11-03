@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import css from '../../../../components/SidebarNotes/SidebarNotes.module.css';
+import css from '../../../../../components/SidebarNotes/SidebarNotes.module.css';
 import { NoteTag } from '@/types/note';
 
 const tags: NoteTag[] = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'];

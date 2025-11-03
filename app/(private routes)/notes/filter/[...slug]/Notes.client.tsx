@@ -2,16 +2,17 @@
 
 import ErrorMessage from '@/app/error';
 import Loader from '@/app/loading';
-import { fetchNotes } from '@/lib/api';
+
 import { NoteTag } from '@/types/note';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import NoteList from '@/components/NoteList/NoteList';
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import css from '../../../../components/NotesPage/NotesPage.module.css';
+import css from '../../../../../components/NotesPage/NotesPage.module.css';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import Link from 'next/link';
+import { fetchNotes } from '@/lib/api/clientApi';
 
 interface Props {
   tag: NoteTag | 'all';
@@ -32,7 +33,7 @@ export default function FilteredNotesClient({ tag }: Props) {
         tag: tag === 'all' ? undefined : tag,
       }),
     placeholderData: keepPreviousData,
-    refetchOnMount: false,
+    refetchOnMount: true,
   });
 
   const handleSearchChange = (value: string): void => {

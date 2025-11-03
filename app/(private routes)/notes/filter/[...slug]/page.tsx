@@ -1,4 +1,3 @@
-import { fetchNotes } from '@/lib/api';
 import { NoteTag } from '@/types/note';
 import {
   dehydrate,
@@ -7,6 +6,7 @@ import {
 } from '@tanstack/react-query';
 import FilteredNotesClient from './Notes.client';
 import { Metadata } from 'next';
+import { fetchNotes } from '@/lib/api/clientApi';
 
 interface Props {
   params: Promise<{ slug: string[] }>;

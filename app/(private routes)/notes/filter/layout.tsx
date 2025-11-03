@@ -1,4 +1,4 @@
-import css from '../../../components/LayoutNotes/LayoutNotes.module.css';
+import css from '../../../../components/LayoutNotes/LayoutNotes.module.css';
 
 type Props = {
   children: React.ReactNode;
