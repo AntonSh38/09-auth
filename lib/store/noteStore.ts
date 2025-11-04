@@ -14,11 +14,11 @@ interface NoteStore {
   clearDraft: () => void;
 }
 
-const initialDraft: Draft = {
+const initialDraft: Draft = Object.freeze({
   title: '',
   content: '',
   tag: 'Todo',
-};
+});
 
 export const useNoteStore = create<NoteStore>()(
   persist(

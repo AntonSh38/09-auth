@@ -5,6 +5,7 @@ import css from '../../../components/SignUpPage/SignUpPage.module.css';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/lib/store/authStore';
+import { getMe, register } from '@/lib/api/clientApi';
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -19,26 +20,12 @@ export default function SignUpPage() {
     setError(null);
     setIsLoading(true);
 
-    // const formData = new FormData(e.currentTarget);
-    // const email = formData.get('email');
-    // const password = formData.get('password');
-
     try {
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-        headers: { 'Content-Type': 'application/json' },
-      });
+      await register({ email, password });
 
-      if (!res.ok) throw new Error('Registration failed');
-
-      await fetch('/api/auth/session', { method: 'GET' });
-
-      const userRes = await fetch('/api/users/me');
-      if (!userRes.ok) throw new Error('Failed to fetch user');
-
-      const user = await userRes.json();
+      const user = await getMe();
       setUser(user);
+
       toast.success('Registration successful!');
       router.push('/profile');
     } catch (err) {
@@ -83,7 +70,11 @@ export default function SignUpPage() {
         </div>
 
         <div className={css.actions}>
-          <button type="submit" className={css.submitButton}>
+          <button
+            type="submit"
+            className={css.submitButton}
+            disabled={isLoading}
+          >
             {isLoading ? 'Creating account...' : 'Register'}
           </button>
         </div>

@@ -1,12 +1,28 @@
-'use client';
-
-import { useAuthStore } from '@/lib/store/authStore';
 import css from '../../../components/ProfilePage/ProfilePage.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Metadata } from 'next';
+import { getMeServer } from '@/lib/api/serverApi';
 
-export default function ProfilePage() {
-  const { user } = useAuthStore();
+export const metadata: Metadata = {
+  title: 'Your Profile - NoteHub',
+  description: 'View and manage your profile information on NoteHub.',
+  openGraph: {
+    title: 'Your Profile - NoteHub',
+    description: 'Manage your account details and preferences on NoteHub.',
+    images: [
+      {
+        url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Profile page preview on NoteHub',
+      },
+    ],
+  },
+};
+
+export default async function ProfilePage() {
+  const user = await getMeServer();
 
   if (!user) {
     return <p>Loading...</p>;

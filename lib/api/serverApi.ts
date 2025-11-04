@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { nextApi } from './api';
 import { User } from '@/types/user';
 import { Note, NoteTag } from '@/types/note';
+import type { AxiosError, AxiosResponse } from 'axios';
 
 interface FetchNotesResponse {
   notes: Note[];
@@ -39,18 +40,25 @@ export async function fetchNoteByIdServer(id: string): Promise<Note> {
   return data;
 }
 
-export async function checkServerSession(): Promise<boolean> {
+export async function checkServerSession(): Promise<AxiosResponse> {
   const cookieStore = cookies();
 
   try {
-    const { data } = await nextApi.get('/auth/session', {
+    const response = await nextApi.get('/auth/session', {
       headers: {
         Cookie: cookieStore.toString(),
       },
     });
-    return !!data?.success;
-  } catch {
-    return false;
+    return response;
+  } catch (err) {
+    const error = err as AxiosError;
+    return {
+      data: { success: false },
+      status: error?.response?.status ?? 500,
+      statusText: error?.response?.statusText ?? 'Session check failed',
+      headers: error?.response?.headers ?? {},
+      config: error?.config ?? {},
+    } as AxiosResponse;
   }
 }
 

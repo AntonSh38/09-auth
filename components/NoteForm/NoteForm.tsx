@@ -2,19 +2,16 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-
 import css from './NoteForm.module.css';
 import { useRouter } from 'next/navigation';
 import { useNoteStore } from '@/lib/store/noteStore';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { createNote } from '@/lib/api/clientApi';
 
 export default function NoteForm() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { draft, setDraft, clearDraft } = useNoteStore();
-
-  const [form, setForm] = useState(draft);
 
   const createNoteMutation = useMutation({
     mutationFn: createNote,
@@ -23,7 +20,6 @@ export default function NoteForm() {
       toast.success('Note created successfully!');
       clearDraft();
       router.push('/notes/filter/all');
-      queryClient.invalidateQueries({ queryKey: ['notes'], exact: false });
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to create note');
@@ -34,18 +30,16 @@ export default function NoteForm() {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    const updated = { ...form, [name]: value };
-    setForm(updated);
-    setDraft(updated);
+    setDraft({ ...draft, [name]: value });
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (!form.title.trim()) {
+    if (!draft.title.trim()) {
       toast.error('Title is required');
       return;
     }
-    createNoteMutation.mutate(form);
+    createNoteMutation.mutate(draft);
   };
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -61,7 +55,7 @@ export default function NoteForm() {
           id="title"
           type="text"
           name="title"
-          value={form.title}
+          value={draft.title}
           onChange={handleChange}
           className={css.input}
           required
@@ -77,7 +71,7 @@ export default function NoteForm() {
           name="content"
           rows={8}
           className={css.textarea}
-          value={form.content}
+          value={draft.content}
           onChange={handleChange}
           maxLength={500}
         />
@@ -89,7 +83,7 @@ export default function NoteForm() {
           id="tag"
           name="tag"
           className={css.select}
-          value={form.tag}
+          value={draft.tag}
           onChange={handleChange}
         >
           <option value="Todo">Todo</option>
